@@ -539,39 +539,43 @@ function generateWeeklyHTML(trending, sentenze, contrasti, totNotizie) {
 
 // ── Classificazione articoli per area giuridica ────────────
 function classifyArticle(article) {
-  // Aree di Edicola Mondo: mondo, italia, politica, economia, scienza_tech,
-  // cultura, sport, salute, ambiente.
+  // Aree di Edicola Mondo. Parole chiave in it/en/fr/es/de: la classificazione
+  // gira sia sul titolo tradotto (it) sia, al primo passaggio, sull'originale.
   const cat = (article.category || '').toLowerCase();
   const t = ((article.title || '') + ' ' + (article.desc || article.description || '')).toLowerCase();
+  const ha = (...parole) => parole.some(p => t.includes(p));
 
-  if (t.includes('elezion') || t.includes('governo') || t.includes('parlamento') || t.includes('ministro') ||
-      t.includes('senato') || t.includes('premier') || t.includes('decreto') || t.includes('coalizion'))
+  if (ha('elezion', 'governo', 'parlamento', 'ministro', 'senato', 'premier', 'decreto', 'coalizion', 'referendum',
+         'election', 'parliament', 'president', 'congress', 'senate', 'minister', 'coalition',
+         'élection', 'gouvernement', 'assemblée', 'wahl', 'bundestag', 'regierung', 'elecciones', 'gobierno'))
     return 'politica';
-  if (t.includes('inflazion') || t.includes('borsa') || t.includes('spread') || t.includes('pil') ||
-      t.includes('banca central') || t.includes('bce') || t.includes('fisco') || t.includes('mercati') ||
-      t.includes('economia') || t.includes('bilancio') || t.includes('dazi'))
+  if (ha('inflazion', 'borsa', 'spread', 'pil ', 'bce', 'fisco', 'mercati', 'economia', 'bilancio', 'dazi', 'banche',
+         'economy', 'inflation', 'markets', 'stocks', 'tariff', 'gdp', 'trade', 'federal reserve', 'wall street',
+         'économie', 'inflation', 'bourse', 'wirtschaft', 'inflación', 'economía', 'aranceles'))
     return 'economia';
-  if (t.includes('intelligenza artificiale') || t.includes(' ai ') || t.includes('startup') ||
-      t.includes('spazio') || t.includes('nasa') || t.includes('ricerca scientifica') || t.includes('scienziat') ||
-      t.includes('tecnolog') || t.includes('scienza') || t.includes('scoperta'))
+  if (ha('intelligenza artificiale', ' ai ', 'startup', 'spazio', 'nasa', 'scienziat', 'tecnolog', 'scienza', 'scoperta', 'ricercator',
+         'artificial intelligence', 'science', 'research', 'spacex', 'quantum', 'chip', 'software', 'robot',
+         'wissenschaft', 'künstliche intelligenz', 'ciencia', 'inteligencia artificial', 'intelligence artificielle'))
     return 'scienza_tech';
-  if (t.includes('cinema') || t.includes('film') || t.includes('libro') || t.includes('romanzo') ||
-      t.includes('mostra') || t.includes('museo') || t.includes('concerto') || t.includes('festival') ||
-      t.includes('teatro') || t.includes('arte '))
+  if (ha('cinema', 'film', 'libro', 'romanzo', 'mostra', 'museo', 'concerto', 'festival', 'teatro', 'arte ', 'musica',
+         'movie', 'music', 'album', 'exhibition', 'novel', 'museum', 'oscar',
+         'musée', 'exposition', 'musik', 'ausstellung', 'película', 'música'))
     return 'cultura';
-  if (t.includes('serie a') || t.includes('champions') || t.includes('juventus') || t.includes('inter') ||
-      t.includes('milan') || t.includes('napoli') || t.includes('tennis') || t.includes('formula 1') ||
-      t.includes('olimpiad') || t.includes('mondiali') || t.includes('calcio'))
+  if (ha('serie a', 'champions', 'juventus', 'inter', 'milan', 'napoli', 'tennis', 'formula 1', 'olimpiad', 'mondiali', 'calcio', 'gran premio',
+         'football', 'soccer', 'nba', 'olympic', 'grand prix', 'premier league', 'wimbledon',
+         'fußball', 'bundesliga', 'fútbol', 'liga'))
     return 'sport';
-  if (t.includes('salute') || t.includes('sanità') || t.includes('ospedale') || t.includes('tumore') ||
-      t.includes('vaccin') || t.includes('medicina') || t.includes('epidemia'))
+  if (ha('salute', 'sanità', 'ospedale', 'tumore', 'vaccin', 'medicina', 'epidemia', 'farmac',
+         'health', 'cancer', 'hospital', 'vaccine', 'disease', 'virus',
+         'santé', 'gesundheit', 'salud', 'krebs'))
     return 'salute';
-  if (t.includes('clima') || t.includes('alluvion') || t.includes('siccità') || t.includes('rinnovabil') ||
-      t.includes('emission') || t.includes('ambiente') || t.includes('incendi'))
+  if (ha('clima', 'alluvion', 'siccità', 'rinnovabil', 'emission', 'ambiente', 'incendi', 'terremoto',
+         'climate', 'wildfire', 'flood', 'drought', 'emissions', 'hurricane', 'earthquake',
+         'klima', 'clima', 'inondation', 'ouragan', 'incendio forestal'))
     return 'ambiente';
-  if (t.includes('guerra') || t.includes('ucraina') || t.includes('gaza') || t.includes('israele') ||
-      t.includes('nato') || t.includes('onu') || t.includes('trump') || t.includes('putin') ||
-      t.includes('diplomazia') || t.includes('sanzioni'))
+  if (ha('guerra', 'ucraina', 'gaza', 'israele', 'nato', 'onu', 'diplomazia', 'sanzioni', 'esteri', 'confine', 'migranti',
+         'war', 'ukraine', 'israel', 'un ', 'ceasefire', 'sanctions', 'diplomacy', 'border', 'refugee',
+         'guerre', 'krieg', 'waffenruhe', 'frontière'))
     return 'mondo';
 
   if (['mondo','italia','politica','economia','scienza_tech','cultura','sport','salute','ambiente'].includes(cat)) return cat;
@@ -1339,6 +1343,10 @@ async function refreshFeeds() {
   }
 
   all = [...italiani, ...translated];
+  // Riclassificazione a valle della traduzione: il titolo tradotto in italiano
+  // permette alle parole chiave di lavorare anche sugli articoli esteri,
+  // evitando che 'mondo' diventi un calderone.
+  all.forEach(a => { a.area_diritto = classifyArticle(a); });
   all.sort((a,b) => new Date(b.date) - new Date(a.date));
 
   // Filtra notizie troppo vecchie dalla homepage (max 96h)
