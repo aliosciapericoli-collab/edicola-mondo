@@ -548,6 +548,7 @@ function classifyArticle(article) {
   const ha = (...parole) => parole.some(p => t.includes(p));
 
   if (ha('serie a', 'champions', 'juventus', 'inter', 'milan', 'napoli', 'tennis', 'formula 1', 'olimpiad', 'mondiali', 'calcio', 'gran premio', 'calciomercato', 'allenator', 'gol ',
+         'atletica', 'nuoto', 'medagli', 'record mondiale', 'record del mondo', 'stile libero', 'maratona', 'europei di', 'ginnastica', 'ciclismo', 'volley', 'basket',
          'football', 'soccer', 'nba', 'olympic', 'grand prix', 'premier league', 'wimbledon', 'transfer',
          'fußball', 'bundesliga', 'fútbol', 'la liga'))
     return 'sport';
@@ -559,11 +560,17 @@ function classifyArticle(article) {
          'economy', 'inflation', 'markets', 'stocks', 'tariff', 'gdp', 'trade deal', 'federal reserve', 'wall street',
          'économie', 'bourse', 'wirtschaft', 'inflación', 'economía', 'aranceles'))
     return 'economia';
+  // Guerre e crisi internazionali PRIMA delle aree tematiche: "Kyiv colpisce
+  // il centro spaziale col missile X" è cronaca di guerra, non scienza.
+  if (ha('guerra', 'bombardament', 'missile', 'raid ', 'offensiva', 'esercito', 'truppe', 'ostagg', 'cessate il fuoco', 'ucraina', 'gaza', 'israele',
+         'war', 'ukraine', 'israel', 'ceasefire', 'airstrike',
+         'guerre', 'krieg', 'waffenruhe'))
+    return 'mondo';
   if (ha('salute', 'sanità', 'ospedale', 'tumore', 'vaccin', 'medicina', 'epidemia', 'farmac',
          'health', 'cancer', 'hospital', 'vaccine', 'disease', 'virus',
          'santé', 'gesundheit', 'salud', 'krebs'))
     return 'salute';
-  if (ha('clima', 'alluvion', 'siccità', 'rinnovabil', 'emission', 'ambiente', 'incendi', 'terremoto', 'animali', 'panda', 'zoo ', 'specie protett', 'biodiversit',
+  if (ha('clima', 'alluvion', 'siccità', 'rinnovabil', 'emission', 'ambiente', 'incendi', 'terremoto', 'animali', 'panda', 'zoo ', 'specie protett', 'biodiversit', 'ondata di calore', 'ondate di calore', 'caldo record',
          'climate', 'wildfire', 'flood', 'drought', 'hurricane', 'earthquake', 'wildlife', 'endangered',
          'klima', 'inondation', 'ouragan', 'incendio forestal'))
     return 'ambiente';
@@ -1252,13 +1259,43 @@ async function refreshFeeds() {
   if (persisted.length > 0) all.push(...persisted);
 
   // Filtra titoli spazzatura (troppo corti, solo numeri, placeholder)
+  // + inserzioni sponsorizzate annidate nei feed (es. CNN infila link
+  //   fool.com/lendingtree con "promo" su carte di credito e mutui)
+  const AD_DOMAINS = ['fool.com', 'lendingtree.com', 'bankrate.com', 'nerdwallet.com', 'smartasset.com', 'taboola.', 'outbrain.', 'doubleclick.'];
   all = all.filter(a => {
     const t = (a.title || '').trim();
     if (t.length < 12) return false;
     if (/^[\d\s\-_.,]+$/.test(t)) return false;
     if (/^(untitled|no title|breaking|update|live|feed|\.\.\.)$/i.test(t)) return false;
+    const link = (a.link || '').toLowerCase();
+    if (AD_DOMAINS.some(d => link.includes(d))) return false;
     return true;
   });
+
+  // Dedup per URL PRIMA di quella per titolo: lo stesso articolo può esserci
+  // due volte con titoli diversi (fresco in lingua originale + versione in
+  // cache già tradotta in italiano) e la dedup per titolo non li aggancia.
+  // A parità di link vince la copia già tradotta (risparmia anche traduzioni).
+  {
+    const byLink = new Map(); // link -> index
+    const dropLink = new Set();
+    all.forEach((a, idx) => {
+      const link = (a.link || '').trim();
+      if (!link) return;
+      if (byLink.has(link)) {
+        const prevIdx = byLink.get(link);
+        if (!all[prevIdx].translated && a.translated) {
+          dropLink.add(prevIdx);
+          byLink.set(link, idx);
+        } else {
+          dropLink.add(idx);
+        }
+      } else {
+        byLink.set(link, idx);
+      }
+    });
+    if (dropLink.size) all = all.filter((_, idx) => !dropLink.has(idx));
+  }
 
   // Dedup aggressiva: normalizza titolo (minuscolo, no punteggiatura, no spazi)
   // Confronta primi 60 chars — cattura duplicati anche con piccole variazioni
@@ -1349,6 +1386,19 @@ async function refreshFeeds() {
   // permette alle parole chiave di lavorare anche sugli articoli esteri,
   // evitando che 'mondo' diventi un calderone.
   all.forEach(a => { a.area_diritto = classifyArticle(a); });
+  // Seconda dedup per titolo, ORA che i titoli sono tutti in italiano: prende
+  // i doppioni sfuggiti alla prima passata (stessa notizia con link diversi,
+  // es. redirect Google News vs URL diretto, o originale vs tradotto).
+  {
+    const seenT = new Set();
+    all = all.filter(a => {
+      const norm = (a.title || '').toLowerCase().replace(/[^a-z0-9àèéìòùáéíóú]/g, '').substring(0, 60);
+      if (!norm) return false;
+      if (seenT.has(norm)) return false;
+      seenT.add(norm);
+      return true;
+    });
+  }
   all.sort((a,b) => new Date(b.date) - new Date(a.date));
 
   // Filtra notizie troppo vecchie dalla homepage (max 96h)
