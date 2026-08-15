@@ -3109,10 +3109,11 @@ http.createServer((req, res) => {
       const disabled = FEEDS.filter(f => feedHealth[f.u] && feedHealth[f.u].failures >= 5 && Date.now() < feedHealth[f.u].disabledUntil).length;
       fonti_attive = FEEDS.length - disabled;
     } catch(e) {}
-    let sentenze_corpus = null;
-    try { const cdb = getCorpusBB(); if (cdb) sentenze_corpus = cdb.prepare('SELECT COUNT(*) AS n FROM sentenze').get().n; } catch(e) {}
-    let articoli_norme = null;
-    try { const gdb = getCodiciBB(); if (gdb) articoli_norme = gdb.prepare('SELECT COUNT(*) AS n FROM articoli_codice').get().n; } catch(e) {}
+    // Edicola Mondo non ha corpus giuridico: i due contatori del manifesto
+    // sono le lingue tradotte (chiave storica sentenze_corpus) e le aree
+    // tematiche (chiave storica articoli_norme).
+    const sentenze_corpus = 5;  // lingue tradotte: en, fr, es, de, ar
+    const articoli_norme = 9;   // aree tematiche
     getManifestoNovita((novita) => {
       res.end(JSON.stringify({ fonti_attive, sentenze_corpus, articoli_norme, novita: novita || [] }));
     });
