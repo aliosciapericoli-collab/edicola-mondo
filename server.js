@@ -539,42 +539,44 @@ function generateWeeklyHTML(trending, sentenze, contrasti, totNotizie) {
 
 // ── Classificazione articoli per area giuridica ────────────
 function classifyArticle(article) {
-  // Aree di Edicola Mondo. Parole chiave in it/en/fr/es/de: la classificazione
-  // gira sia sul titolo tradotto (it) sia, al primo passaggio, sull'originale.
+  // Aree di Edicola Mondo. Parole chiave it/en/fr/es/de sul titolo tradotto.
+  // Ordine dei controlli: dai temi più inequivocabili (sport) ai più generici
+  // (scienza/tech per ultima: le sue parole chiave sono le più ambigue).
+  // NB: niente " ai " tra le chiavi — in italiano è una preposizione.
   const cat = (article.category || '').toLowerCase();
   const t = ((article.title || '') + ' ' + (article.desc || article.description || '')).toLowerCase();
   const ha = (...parole) => parole.some(p => t.includes(p));
 
-  if (ha('elezion', 'governo', 'parlamento', 'ministro', 'senato', 'premier', 'decreto', 'coalizion', 'referendum',
+  if (ha('serie a', 'champions', 'juventus', 'inter', 'milan', 'napoli', 'tennis', 'formula 1', 'olimpiad', 'mondiali', 'calcio', 'gran premio', 'calciomercato', 'allenator', 'gol ',
+         'football', 'soccer', 'nba', 'olympic', 'grand prix', 'premier league', 'wimbledon', 'transfer',
+         'fußball', 'bundesliga', 'fútbol', 'la liga'))
+    return 'sport';
+  if (ha('elezion', 'governo', 'parlamento', 'ministro', 'senato', 'premier ', 'decreto', 'coalizion', 'referendum', 'partito',
          'election', 'parliament', 'president', 'congress', 'senate', 'minister', 'coalition',
          'élection', 'gouvernement', 'assemblée', 'wahl', 'bundestag', 'regierung', 'elecciones', 'gobierno'))
     return 'politica';
-  if (ha('inflazion', 'borsa', 'spread', 'pil ', 'bce', 'fisco', 'mercati', 'economia', 'bilancio', 'dazi', 'banche',
-         'economy', 'inflation', 'markets', 'stocks', 'tariff', 'gdp', 'trade', 'federal reserve', 'wall street',
-         'économie', 'inflation', 'bourse', 'wirtschaft', 'inflación', 'economía', 'aranceles'))
+  if (ha('inflazion', 'borsa', 'spread', 'pil ', 'bce', 'fisco', 'mercati', 'economia', 'bilancio', 'dazi', 'banche', 'imprese',
+         'economy', 'inflation', 'markets', 'stocks', 'tariff', 'gdp', 'trade deal', 'federal reserve', 'wall street',
+         'économie', 'bourse', 'wirtschaft', 'inflación', 'economía', 'aranceles'))
     return 'economia';
-  if (ha('intelligenza artificiale', ' ai ', 'startup', 'spazio', 'nasa', 'scienziat', 'tecnolog', 'scienza', 'scoperta', 'ricercator',
-         'artificial intelligence', 'science', 'research', 'spacex', 'quantum', 'chip', 'software', 'robot',
-         'wissenschaft', 'künstliche intelligenz', 'ciencia', 'inteligencia artificial', 'intelligence artificielle'))
-    return 'scienza_tech';
-  if (ha('cinema', 'film', 'libro', 'romanzo', 'mostra', 'museo', 'concerto', 'festival', 'teatro', 'arte ', 'musica',
-         'movie', 'music', 'album', 'exhibition', 'novel', 'museum', 'oscar',
-         'musée', 'exposition', 'musik', 'ausstellung', 'película', 'música'))
-    return 'cultura';
-  if (ha('serie a', 'champions', 'juventus', 'inter', 'milan', 'napoli', 'tennis', 'formula 1', 'olimpiad', 'mondiali', 'calcio', 'gran premio',
-         'football', 'soccer', 'nba', 'olympic', 'grand prix', 'premier league', 'wimbledon',
-         'fußball', 'bundesliga', 'fútbol', 'liga'))
-    return 'sport';
   if (ha('salute', 'sanità', 'ospedale', 'tumore', 'vaccin', 'medicina', 'epidemia', 'farmac',
          'health', 'cancer', 'hospital', 'vaccine', 'disease', 'virus',
          'santé', 'gesundheit', 'salud', 'krebs'))
     return 'salute';
-  if (ha('clima', 'alluvion', 'siccità', 'rinnovabil', 'emission', 'ambiente', 'incendi', 'terremoto',
-         'climate', 'wildfire', 'flood', 'drought', 'emissions', 'hurricane', 'earthquake',
-         'klima', 'clima', 'inondation', 'ouragan', 'incendio forestal'))
+  if (ha('clima', 'alluvion', 'siccità', 'rinnovabil', 'emission', 'ambiente', 'incendi', 'terremoto', 'animali', 'panda', 'zoo ', 'specie protett', 'biodiversit',
+         'climate', 'wildfire', 'flood', 'drought', 'hurricane', 'earthquake', 'wildlife', 'endangered',
+         'klima', 'inondation', 'ouragan', 'incendio forestal'))
     return 'ambiente';
+  if (ha('cinema', 'film', 'libro', 'romanzo', 'mostra', 'museo', 'concerto', 'festival', 'teatro', 'arte ', 'musica', 'attore', 'attrice', 'regista',
+         'movie', 'music', 'album', 'exhibition', 'novel', 'museum', 'oscar',
+         'musée', 'exposition', 'musik', 'ausstellung', 'película', 'música'))
+    return 'cultura';
+  if (ha('intelligenza artificiale', 'startup', 'spazio', 'nasa', 'scienziat', 'tecnolog', 'scoperta scientifica', 'ricercator', 'algoritm', 'smartphone',
+         'artificial intelligence', 'chatgpt', 'spacex', 'quantum', 'software', 'robot', 'scientists', 'research shows',
+         'wissenschaft', 'künstliche intelligenz', 'ciencia', 'inteligencia artificial', 'intelligence artificielle'))
+    return 'scienza_tech';
   if (ha('guerra', 'ucraina', 'gaza', 'israele', 'nato', 'onu', 'diplomazia', 'sanzioni', 'esteri', 'confine', 'migranti',
-         'war', 'ukraine', 'israel', 'un ', 'ceasefire', 'sanctions', 'diplomacy', 'border', 'refugee',
+         'war', 'ukraine', 'israel', 'ceasefire', 'sanctions', 'diplomacy', 'refugee',
          'guerre', 'krieg', 'waffenruhe', 'frontière'))
     return 'mondo';
 
