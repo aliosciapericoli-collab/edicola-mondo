@@ -4,8 +4,8 @@
   "description": "Il Mondo in Prima Pagina — notizie internazionali tradotte in italiano",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#131011",
-  "theme_color": "#A0522A",
+  "background_color": "#0C1A17",
+  "theme_color": "#137A52",
   "orientation": "any",
   "icons": [
     {

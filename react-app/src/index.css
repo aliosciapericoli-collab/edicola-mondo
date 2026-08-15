@@ -1,20 +1,20 @@
 /* ── CSS VARIABLES (default = dark) ── */
 :root {
-  /* Palette "Sala Stampa" — fondo bruno caldo, oro invariato, porpora come secondo accento */
-  --eg-bg: #131011;
-  --eg-surface: #1D1719;
-  --eg-surface-hover: #251D20;
-  --eg-border: #302629;
-  --eg-accent: #C8A96E;
-  --eg-accent-dim: #8B7744;
-  --eg-porpora: #C46A7C;
-  --eg-porpora-deep: #7E2A3C;
-  --eg-text: #E8E4DD;
-  --eg-text-muted: #948A87;
-  --eg-text-dim: #5C5552;
-  --eg-danger: #C45C5C;
-  --eg-success: #4A9960;
-  --eg-trending: #D4A053;
+  /* Palette "Meridiana" — petrolio profondo e menta; l'oro vive solo nello stemma */
+  --eg-bg: #0C1A17;
+  --eg-surface: #142823;
+  --eg-surface-hover: #1A322C;
+  --eg-border: #254139;
+  --eg-accent: #3ECF8E;
+  --eg-accent-dim: #2A8F63;
+  --eg-porpora: #3ECF8E;
+  --eg-porpora-deep: #137A52;
+  --eg-text: #E4EEE8;
+  --eg-text-muted: #81978C;
+  --eg-text-dim: #5C6E64;
+  --eg-danger: #E36262;
+  --eg-success: #3ECF8E;
+  --eg-trending: #E4B33E;
 }
 
 /* ── TRANSITION FLUIDA ── */

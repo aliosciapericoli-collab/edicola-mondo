@@ -22,40 +22,41 @@ function loadPreview(url) {
   return p;
 }
 
-// Palette "Sala Stampa": fondo neutro caldo (bruno, non più blu-grigio),
-// oro invariato, porpora cardinalizia come secondo accento.
+// Palette "Meridiana": petrolio profondo e menta — niente oro nell'interfaccia
+// (l'oro vive solo nello stemma). Il token 'porpora' resta per compatibilità
+// e vale menta anche lui (tasti Traduci ecc.).
 const DARK = {
-  bg: "#131011",
-  surface: "#1D1719",
-  surfaceHover: "#251D20",
-  border: "#302629",
-  accent: "#C8A96E",
-  accentDim: "#8B7744",
-  porpora: "#D08A56",
-  porporaDeep: "#8A4A1F",
-  text: "#E8E4DD",
-  textMuted: "#948A87",
-  textDim: "#5C5552",
-  danger: "#C45C5C",
-  success: "#4A9960",
-  trending: "#D4A053",
+  bg: "#0C1A17",
+  surface: "#142823",
+  surfaceHover: "#1A322C",
+  border: "#254139",
+  accent: "#3ECF8E",
+  accentDim: "#2A8F63",
+  porpora: "#3ECF8E",
+  porporaDeep: "#137A52",
+  text: "#E4EEE8",
+  textMuted: "#81978C",
+  textDim: "#5C6E64",
+  danger: "#E36262",
+  success: "#3ECF8E",
+  trending: "#E4B33E",
 };
 
 const LIGHT = {
-  bg: "#F5F1EA",
-  surface: "#FFFFFF",
-  surfaceHover: "#EFE8DE",
-  border: "#DCD2C6",
-  accent: "#96702A",
-  accentDim: "#C8A96E",
-  porpora: "#A0522A",
-  porporaDeep: "#A0522A",
-  text: "#1E1814",
-  textMuted: "#6E645C",
-  textDim: "#8A8480",
+  bg: "#EFF4EE",
+  surface: "#FBFDFB",
+  surfaceHover: "#E2EBE1",
+  border: "#CFDCCE",
+  accent: "#137A52",
+  accentDim: "#3ECF8E",
+  porpora: "#137A52",
+  porporaDeep: "#137A52",
+  text: "#182420",
+  textMuted: "#62756C",
+  textDim: "#8A9990",
   danger: "#B04040",
-  success: "#2E7A40",
-  trending: "#8A5A1A",
+  success: "#137A52",
+  trending: "#A5821B",
 };
 
 // Tema globale — aggiornato dal toggle
@@ -64,16 +65,16 @@ const getColors = () => _darkMode ? DARK : LIGHT;
 let COLORS = getColors();
 
 const AREA_COLORS = {
-  // Aree di Edicola Mondo
-  "mondo": "#C97845",
-  "italia": "#5CA065",
-  "politica": "#C45C8A",
-  "economia": "#D4A053",
-  "scienza_tech": "#5CBAC4",
-  "cultura": "#9B7EC4",
-  "sport": "#5B9BD5",
-  "salute": "#C45C5C",
-  "ambiente": "#4A9960",
+  // Aree di Edicola Mondo — calibrate sulla palette Meridiana
+  "mondo": "#38BDD8",
+  "italia": "#3ECF8E",
+  "politica": "#E07A9A",
+  "economia": "#E4B33E",
+  "scienza_tech": "#6F9FE8",
+  "cultura": "#B08AD6",
+  "sport": "#E8825A",
+  "salute": "#E36262",
+  "ambiente": "#7CB65B",
   "penale": "#C45C5C",
   "civile": "#5B9BD5",
   "lavoro": "#5CA065",
@@ -8578,7 +8579,7 @@ export default function EdicolaGiuridica() {
 
   // ── LAYOUT UNICO (desktop + mobile via CSS) ───────────────────────
   return (
-    <div className="eg-app" style={{ background:"var(--eg-bg)", minHeight:"100vh", fontFamily:"'Crimson Pro','Georgia',serif" }}>
+    <div className="eg-app" style={{ background:"var(--eg-bg)", minHeight:"100vh", fontFamily:"Inter,-apple-system,'Segoe UI',sans-serif" }}>
 
       {/* Contenuto centrale */}
       <div className="eg-main-col" style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0 }}>
