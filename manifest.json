@@ -1,0 +1,22 @@
+{
+  "name": "Edicola Mondo",
+  "short_name": "Mondo",
+  "description": "Edicola Mondo — Il Mondo in Prima Pagina",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#131011",
+  "theme_color": "#A0522A",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
