@@ -7772,9 +7772,9 @@ function PageManifesto() {
     muted:      { fontSize:13, color:"var(--eg-text-muted)", lineHeight:1.75, margin:"0 0 8px 0" },
   };
   const MODULI = [
-    ["Notizie",    <>L'unico aggregatore AI d'Italia dedicato al diritto: <strong style={{color:"var(--eg-accent)"}}>{fontiPh}</strong> fonti — testate giuridiche, istituzioni, corti, autorità — lette, deduplicate e ordinate ogni ora.</>],
-    ["Cassazione", <>L'archivio delle sentenze civili e penali della Corte, costruito dalle fonti ufficiali, con ricerca full-text: <strong style={{color:"var(--eg-accent)"}}>{sentenzePh}</strong> provvedimenti, e cresce ogni notte.</>],
-    ["Norme",      <>Codici e leggi, collegati alle notizie e alla giurisprudenza: <strong style={{color:"var(--eg-accent)"}}>{articoliPh}</strong> articoli consultabili.</>],
+    ["Notizie dal mondo", <>Aggregatore AI di notizie internazionali e italiane: <strong style={{color:"var(--eg-accent)"}}>{fontiPh}</strong> fonti — ANSA, BBC, The Guardian, New York Times, Al Jazeera, Deutsche Welle, Le Monde, El País e le principali testate italiane — lette, deduplicate e ordinate ogni ora.</>],
+    ["Traduzioni",        <>Ogni titolo straniero arriva già in italiano, automaticamente. L'articolo intero si traduce con un click, e l'originale resta sempre a un click di distanza. Inglese, francese, spagnolo, tedesco e arabo — lette come se fossero scritte per te.</>],
+    ["Nove aree, zero bolle", <>Mondo, Italia, Politica, Economia, Scienza e Tech, Cultura, Sport, Salute, Ambiente: filtri trasparenti con i conteggi in chiaro. L'ordine è cronologico. Nessun algoritmo decide cosa devi leggere.</>],
   ];
 
   return (
@@ -7787,11 +7787,11 @@ function PageManifesto() {
           Edicola Mondo
         </h1>
         <p style={{ fontSize:15, color:"var(--eg-text-muted)", lineHeight:1.6, margin:0, maxWidth:480, marginLeft:"auto", marginRight:"auto", fontStyle:"italic" }}>
-          Facciamo poche cose. Le facciamo meglio di chiunque altro.
+          Il Mondo in Prima Pagina. Notizie internazionali tradotte in italiano — senza algoritmi che scelgono per te.
         </p>
         {/* Stat hero — numeri reali */}
         <div style={{ display:"flex", justifyContent:"center", gap:28, marginTop:26, flexWrap:"wrap" }}>
-          {[[fontiPh,"fonti"],[sentenzePh,"sentenze Cassazione"],[articoliPh,"articoli dei codici"]].map(([val,lab],i)=>(
+          {[[fontiPh,"fonti"],["9","aree tematiche"],["5","lingue tradotte"]].map(([val,lab],i)=>(
             <div key={i} style={{ textAlign:"center" }}>
               <div style={{ fontSize:22, fontWeight:800, color:"var(--eg-accent)", lineHeight:1, fontFamily:"monospace" }}>{val}</div>
               <div style={{ fontSize:10, color:"var(--eg-text-dim)", textTransform:"uppercase", letterSpacing:"0.08em", marginTop:6 }}>{lab}</div>
@@ -7815,9 +7815,9 @@ function PageManifesto() {
       <div style={S.card}>
         <div style={S.label}>Tre promesse</div>
         {[
-          [<><strong style={{color:"var(--eg-accent)"}}>Solo fonti ufficiali e pubbliche.</strong> Ogni documento porta il link all'originale.</>],
-          [<><strong style={{color:"var(--eg-accent)"}}>Numeri veri.</strong> I contatori di questa pagina sono letti in tempo reale; se una sezione è in costruzione lo diciamo.</>],
-          [<><strong style={{color:"var(--eg-accent)"}}>Gratis.</strong> Gli atti dello Stato non hanno padroni (art. 5, legge sul diritto d'autore).</>],
+          [<><strong style={{color:"var(--eg-accent)"}}>Solo fonti vere.</strong> Ogni notizia porta il link alla testata originale: noi aggreghiamo, non riscriviamo il mondo.</>],
+          [<><strong style={{color:"var(--eg-accent)"}}>Nessuna bolla.</strong> L'ordine è cronologico e i filtri li scegli tu. Nessun profilo, nessuna personalizzazione occulta.</>],
+          [<><strong style={{color:"var(--eg-accent)"}}>Gratis.</strong> L'informazione di base è un bene comune.</>],
         ].map(([testo], i) => (
           <div key={i} style={{ fontSize:13, color:"var(--eg-text)", lineHeight:1.65, padding:"11px 0", borderBottom: i < 2 ? "1px solid var(--eg-border)" : "none" }}>{testo}</div>
         ))}
@@ -7842,13 +7842,13 @@ function PageManifesto() {
       <div style={S.card}>
         <div style={S.label}>Chi siamo</div>
         <p style={S.body}>
-          Edicola Mondo è un progetto italiano indipendente. Non siamo un editore. Aggreghiamo, analizziamo, colleghiamo: notizie, sentenze di Cassazione e testi normativi, sempre da fonti ufficiali e pubbliche.
+          Edicola Mondo è un progetto italiano indipendente. Non siamo un editore: aggreghiamo, traduciamo e ordiniamo le notizie del mondo, sempre con il link alla fonte originale.
         </p>
         <p style={{ ...S.muted, marginBottom:12 }}>
-          Non vendiamo consulenze legali. Non sostituiamo avvocati. Costruiamo strumenti per chi lavora con il diritto.
+          Crediamo che leggere la stampa internazionale non debba richiedere quattro lingue e dieci abbonamenti. La selezione la fai tu: noi togliamo solo le barriere.
         </p>
-        <a href="mailto:info@edicolagiuridica.it" style={{ fontSize:12, color:"var(--eg-accent)", textDecoration:"none", fontWeight:600 }}>
-          info@edicolagiuridica.it →
+        <a href="mailto:info@edicolamondo.com" style={{ fontSize:12, color:"var(--eg-accent)", textDecoration:"none", fontWeight:600 }}>
+          info@edicolamondo.com →
         </a>
       </div>
 
@@ -7856,7 +7856,7 @@ function PageManifesto() {
       <div style={{ ...S.card, border:"1px solid var(--eg-accent-dim)", background:"rgba(200,169,110,0.04)", marginBottom:0 }}>
         <div style={{ fontSize:11, color:"var(--eg-accent)", fontWeight:700, marginBottom:10, textTransform:"uppercase", letterSpacing:"0.12em" }}>⚖️ Avvertenze legali</div>
         <p style={{ fontSize:13, color:"var(--eg-text)", lineHeight:1.7, margin:"0 0 10px 0" }}>
-          I contenuti prodotti dal sistema AI — analisi e sintesi — sono elaborazioni automatiche e possono contenere errori. Nessun contenuto costituisce consulenza legale: la supervisione umana è sempre necessaria.
+          Le traduzioni e le sintesi sono elaborazioni automatiche e possono contenere errori: per citare una notizia, verifica sempre l'articolo originale, linkato in ogni scheda.
         </p>
         <button onClick={() => window.__disclaimerOpen && window.__disclaimerOpen()} style={{
           background:"transparent", border:"1px solid var(--eg-accent)", color:"var(--eg-accent)",
