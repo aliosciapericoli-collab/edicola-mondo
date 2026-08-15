@@ -2,7 +2,7 @@
 
 **Il Mondo in Prima Pagina** — aggregatore AI di notizie generaliste: esteri,
 Italia, politica, economia, scienza e tech, cultura, sport, salute, ambiente.
-Fonti internazionali (BBC, Guardian, NYT, Al Jazeera, DW, Le Monde, El País)
+Oltre 50 fonti italiane e internazionali (BBC, CNN, Guardian, NYT, Spiegel, Le Figaro, El Mundo, SCMP…)
 **tradotte automaticamente in italiano**, più le principali testate italiane.
 
 Terza testata della famiglia Edicola (stesso motore di Edicola Giuridica ed

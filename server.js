@@ -761,6 +761,47 @@ const FEEDS = [
   {n:'GN Salute',u:'https://news.google.com/rss/search?q=salute+OR+sanità+OR+medicina&hl=it&gl=IT&ceid=IT:it',c:'salute',lang:'it',priority:7},
   {n:'GN Ambiente',u:'https://news.google.com/rss/search?q=clima+OR+ambiente+OR+energia+rinnovabile&hl=it&gl=IT&ceid=IT:it',c:'ambiente',lang:'it',priority:7},
   {n:'GN World EN',u:'https://news.google.com/rss/search?q=world+news+OR+breaking&hl=en&gl=US&ceid=US:en',c:'mondo',lang:'en',priority:7},
+
+  // === D. ITALIA — SECONDA ONDATA ===
+  {n:'Il Fatto Quotidiano',u:'https://www.ilfattoquotidiano.it/feed/',c:'italia',lang:'it',priority:8},
+  {n:'Open',u:'https://www.open.online/feed/',c:'italia',lang:'it',priority:8},
+  {n:'Adnkronos',u:'https://www.adnkronos.com/RSS_PrimaPagina.xml',c:'italia',lang:'it',priority:8},
+  {n:'RaiNews',u:'https://www.rainews.it/rss/tutti',c:'italia',lang:'it',priority:8},
+  {n:'Sky TG24',u:'https://tg24.sky.it/rss/tg24_flipboard.xml',c:'italia',lang:'it',priority:8},
+  {n:'Linkiesta',u:'https://www.linkiesta.it/feed/',c:'politica',lang:'it',priority:7},
+  {n:'Internazionale',u:'https://www.internazionale.it/rss',c:'mondo',lang:'it',priority:9},
+  {n:'Il Sole 24 Ore Mondo',u:'https://www.ilsole24ore.com/rss/mondo.xml',c:'mondo',lang:'it',priority:8},
+
+  // === E. MONDO — TESTATE INTERNAZIONALI, SECONDA ONDATA ===
+  {n:'CNN World',u:'http://rss.cnn.com/rss/edition_world.rss',c:'mondo',lang:'en',priority:8},
+  {n:'Euronews',u:'https://www.euronews.com/rss',c:'mondo',lang:'en',priority:7},
+  {n:'France 24',u:'https://www.france24.com/en/rss',c:'mondo',lang:'en',priority:7},
+  {n:'The Independent World',u:'https://www.independent.co.uk/news/world/rss',c:'mondo',lang:'en',priority:7},
+  {n:'Der Spiegel Intl',u:'https://www.spiegel.de/international/index.rss',c:'mondo',lang:'en',priority:7},
+  {n:'ABC News Australia',u:'https://www.abc.net.au/news/feed/51120/rss.xml',c:'mondo',lang:'en',priority:6},
+  {n:'CBC World',u:'https://www.cbc.ca/webfeed/rss/rss-world',c:'mondo',lang:'en',priority:6},
+  {n:'Times of India',u:'https://timesofindia.indiatimes.com/rssfeedstopstories.cms',c:'mondo',lang:'en',priority:6},
+  {n:'South China Morning Post',u:'https://www.scmp.com/rss/91/feed',c:'mondo',lang:'en',priority:7},
+  {n:'Le Figaro',u:'https://www.lefigaro.fr/rss/figaro_actualites.xml',c:'mondo',lang:'fr',priority:7},
+  {n:'RFI',u:'https://www.rfi.fr/fr/rss',c:'mondo',lang:'fr',priority:7},
+  {n:'El Mundo',u:'https://e00-elmundo.uecdn.es/elmundo/rss/portada.xml',c:'mondo',lang:'es',priority:7},
+  {n:'FAZ',u:'https://www.faz.net/rss/aktuell/',c:'mondo',lang:'de',priority:7},
+  {n:'Süddeutsche Zeitung',u:'https://rss.sueddeutsche.de/rss/Topthemen',c:'mondo',lang:'de',priority:7},
+  {n:'NZZ',u:'https://www.nzz.ch/recent.rss',c:'mondo',lang:'de',priority:7},
+
+  // === F. AREE TEMATICHE — SECONDA ONDATA ===
+  {n:'Wired Italia',u:'https://www.wired.it/feed/rss',c:'scienza_tech',lang:'it',priority:8},
+  {n:'Ars Technica',u:'https://feeds.arstechnica.com/arstechnica/index',c:'scienza_tech',lang:'en',priority:7},
+  {n:'The Verge',u:'https://www.theverge.com/rss/index.xml',c:'scienza_tech',lang:'en',priority:7},
+  {n:'Gazzetta dello Sport',u:'https://www.gazzetta.it/rss/home.xml',c:'sport',lang:'it',priority:8},
+  {n:'Artribune',u:'https://www.artribune.com/feed/',c:'cultura',lang:'it',priority:7},
+  {n:'Rolling Stone Italia',u:'https://www.rollingstone.it/feed/',c:'cultura',lang:'it',priority:6},
+  {n:'LifeGate',u:'https://www.lifegate.it/feed',c:'ambiente',lang:'it',priority:7},
+
+  // === G. GOOGLE NEWS — GEOGRAFIE ===
+  {n:'GN Africa',u:'https://news.google.com/rss/search?q=Africa+OR+Sahel+OR+Nigeria+OR+Etiopia+OR+Congo&hl=it&gl=IT&ceid=IT:it',c:'mondo',lang:'it',priority:7},
+  {n:'GN America Latina',u:'https://news.google.com/rss/search?q=Brasile+OR+Argentina+OR+Messico+OR+%22America+Latina%22&hl=it&gl=IT&ceid=IT:it',c:'mondo',lang:'it',priority:7},
+  {n:'GN Medio Oriente',u:'https://news.google.com/rss/search?q=%22Medio+Oriente%22+OR+Iran+OR+Arabia+Saudita+OR+Turchia&hl=it&gl=IT&ceid=IT:it',c:'mondo',lang:'it',priority:7},
 ];
 
 let cache = { articles: [], ts: 0, sources: 0 };
