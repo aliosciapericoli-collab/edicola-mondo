@@ -1391,9 +1391,18 @@ function ArticleReaderPanel({ item, onClose, onOpenArticolo }) {
                       .replace(/[ \t]+/g, ' ')
                       .replace(/\n{3,}/g, '\n\n')
                       .trim();
-                    const r = await fetch(API + '/api/translate-full', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: plain, lang: item.lang }) });
-                    const d = await r.json();
-                    if (d.translated) setTradFull(d.translated);
+                    // Due richieste in parallelo: la PRIMA porzione (veloce,
+                    // ~4s) compare subito; il testo completo la sostituisce
+                    // appena pronto. Così il lettore non fissa uno spinner.
+                    const primo = plain.slice(0, 1600);
+                    const chiama = (t) => fetch(API + '/api/translate-full', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: t, lang: item.lang }) }).then(r => r.json()).catch(() => null);
+                    const pTutto = chiama(plain);
+                    if (plain.length > 1700) {
+                      const d1 = await chiama(primo);
+                      if (d1 && d1.translated) { setTradFull(d1.translated + '\n\n⏳ Traduzione del resto in corso…'); setTradFullLoading(false); }
+                    }
+                    const d = await pTutto;
+                    if (d && d.translated) setTradFull(d.translated);
                   } catch(_) {}
                   setTradFullLoading(false);
                 }} style={{ fontSize:12, fontWeight:700, padding:'6px 14px', borderRadius:6, border:'1px solid var(--eg-porpora)', background:'var(--eg-porpora)15', color:'var(--eg-porpora)', cursor:'pointer' }}>

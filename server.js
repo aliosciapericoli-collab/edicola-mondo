@@ -964,6 +964,10 @@ async function translateBatchClaude(items, fromLang) {
   } catch (_) { return null; }
 }
 
+// Cache delle traduzioni integrali (tasto "Traduci"): chiave = hash del testo.
+// Il secondo lettore dello stesso articolo riceve la traduzione all'istante.
+const _translFullCache = new Map();
+
 // Traduzione INTEGRALE di blocchi di testo lunghi (tasto "Traduci articolo").
 // Distinta da translateBatchClaude, che è tarata sui titoli e TRONCA a 300
 // caratteri: qui i blocchi passano interi e il prompt vieta di riassumere.
@@ -2742,14 +2746,24 @@ http.createServer((req, res) => {
           else cur = cur ? cur + '\n\n' + p : p;
         }
         if (cur) blocchi.push(cur);
+        // CACHE: stesso articolo, stesso testo → risposta immediata (qualunque lettore)
+        const chiave = (() => { let h = 0; for (let i = 0; i < testo.length; i++) h = (h * 31 + testo.charCodeAt(i)) | 0; return h + ':' + testo.length + ':' + lang; })();
+        if (_translFullCache.has(chiave)) return res.end(JSON.stringify({ translated: _translFullCache.get(chiave), cached: true }));
+        // Lotti IN PARALLELO: il tempo totale è quello del lotto più lento,
+        // non la somma — un articolo da 12k scende da ~25s a ~10s.
+        const batches = [];
+        for (let i = 0; i < blocchi.length; i += 4) batches.push(blocchi.slice(i, i + 4));
+        const esiti = await Promise.all(batches.map(b => translateFullClaude(b, lang)));
         const fuori = [];
-        for (let i = 0; i < blocchi.length; i += 4) {
-          const batch = blocchi.slice(i, i + 4);
-          const out = await translateFullClaude(batch, lang);
-          if (!out) { fuori.push(...batch); continue; }
-          fuori.push(...out.map((o, j) => o || batch[j]));
-        }
-        res.end(JSON.stringify({ translated: fuori.join('\n\n') }));
+        esiti.forEach((out, bi) => {
+          const batch = batches[bi];
+          if (!out) fuori.push(...batch);
+          else fuori.push(...out.map((o, j) => o || batch[j]));
+        });
+        const unito = fuori.join('\n\n');
+        if (_translFullCache.size >= 300) _translFullCache.delete(_translFullCache.keys().next().value);
+        _translFullCache.set(chiave, unito);
+        res.end(JSON.stringify({ translated: unito }));
       } catch(e) {
         res.end(JSON.stringify({ translated: '', error: e.message }));
       }
